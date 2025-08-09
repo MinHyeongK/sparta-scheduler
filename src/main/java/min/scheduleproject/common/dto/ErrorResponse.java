@@ -1,4 +1,4 @@
-package min.scheduleproject.dto;
+package min.scheduleproject.common.dto;
 
 import lombok.Getter;
 

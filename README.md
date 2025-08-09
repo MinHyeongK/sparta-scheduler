@@ -1,30 +1,21 @@
 # sparta-scheduler
 
 
----
+## 📌 Scheduler API 명세
 
-## 📁 일정 (Schedule)
-
-| 메서드 | 엔드포인트 | 설명 | 요청 바디 예시 |
-|--------|-------------|------|----------------|
-| POST   | `/`         | 일정 생성 | ```json\n{\n  "title": "제목",\n  "content": "내용",\n  "name": "이름",\n  "password": "password"\n}``` |
-| GET    | `/1`        | 단일 일정 조회 (ID = 1) | 없음 |
-| GET    | `/`         | 전체 일정 조회 | 없음 |
-| PATCH  | `/16`       | 일정 일부 수정 (ID = 16) | ```json\n{\n  "title": "123",\n  "name": "123",\n  "password": "password"\n}``` |
-| DELETE | `/1`        | 일정 삭제 (ID = 1) | 없음 |
-
----
-
-## 👤 사용자 (User)
-
-| 메서드 | 엔드포인트 | 설명 | 요청 바디 예시 |
-|--------|-------------|------|----------------|
-| POST   | `/`         | 유저 생성 | ```json\n{\n  "name": "홍길동",\n  "email": "abcde@naver.com",\n  "password": "password"\n}``` |
-| GET    | `/1`        | 유저 조회 (ID = 1) | 없음 |
-| PATCH  | `/1`        | 유저 정보 수정 | ```json\n{\n  "name": "김철수",\n  "password": "password"\n}``` |
-| DELETE | `/1`        | 유저 삭제 | ```json\n{\n  "password": "password"\n}``` |
-
-> 📝 유저 연동 시 일정의 `"name"` 필드는 `"userId"` 혹은 UID로 변경 필요
+| 분류 | 기능 | 메서드 | 엔드포인트 | Body 예시 |
+|------|------|--------|------------|-----------|
+| **Schedule** | 일정 생성 | POST | `/` | ```json { "title": "제목", "contents": "내용", "name": "이름", "password": "password" } ``` |
+|  | 단건 일정 조회 | GET | `/{scheduleId}` | - |
+|  | 전체 일정 조회 | GET | `/?name=이름` | - |
+|  | 일정 일부 수정 | PATCH | `/{scheduleId}` | ```json { "title": "123", "name": "123", "password": "password" } ``` |
+|  | 일정 삭제 | DELETE | `/{scheduleId}` | ```json { "password": "password" } ``` |
+| **User** | 유저 생성 | POST | `/users` | ```json { "userName": "홍길동", "email": "abcde@naver.com", "password": "password" } ``` |
+|  | 전체 유저 조회 | GET | `/users` | - |
+|  | 단일 유저 조회 | GET | `/users/{userId}` | - |
+|  | 유저 수정 | PATCH | `/users/{userId}` | ```json { "userName": "김수한무", "password": "password" } ``` |
+|  | 유저 삭제 | DELETE | `/users/{userId}` | ```json { "password": "password" } ``` |
+| **Comment** | 댓글 생성 | POST | `/{scheduleId}` | ```json { "contents": "contents", "name": "name", "password": "password", "createdAt": "createdAt", "updatedAt": "updatedAt" } ``` |
 
 
 ## 🗃️ Database Schema (DDL)

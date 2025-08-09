@@ -1,4 +1,4 @@
-package min.scheduleproject.dto;
+package min.scheduleproject.schedule.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ScheduleCreateRequestDto  {
+    private Long uid;
     private String title;
     private String contents;
-    private String name;
     private String password;
 }

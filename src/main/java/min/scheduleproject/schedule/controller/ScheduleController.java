@@ -1,8 +1,8 @@
-package min.scheduleproject.controller;
+package min.scheduleproject.schedule.controller;
 
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.dto.*;
-import min.scheduleproject.service.ScheduleService;
+import min.scheduleproject.schedule.dto.*;
+import min.scheduleproject.schedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,13 +23,13 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleFindResponseDto> findSchedule(@PathVariable long id){
+    public ResponseEntity<ScheduleGetResponseDto> findSchedule(@PathVariable long id){
         return new ResponseEntity<>(scheduleService.findSchedule(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleFindResponseDto>> findAllSchedules(@RequestParam(required = false) String name){
-        return new ResponseEntity<>(scheduleService.findAllSchedules(name), HttpStatus.OK);
+    public ResponseEntity<List<ScheduleGetResponseDto>> findAllSchedules(@RequestParam(required = false) long uid){
+        return new ResponseEntity<>(scheduleService.findAllSchedules(uid), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")

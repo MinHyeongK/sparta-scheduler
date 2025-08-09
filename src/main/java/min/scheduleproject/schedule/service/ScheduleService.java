@@ -1,9 +1,11 @@
-package min.scheduleproject.service;
+package min.scheduleproject.schedule.service;
 
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.dto.*;
-import min.scheduleproject.entity.Schedule;
-import min.scheduleproject.repository.ScheduleRepository;
+import min.scheduleproject.schedule.dto.*;
+import min.scheduleproject.schedule.entity.Schedule;
+import min.scheduleproject.schedule.repository.ScheduleRepository;
+import min.scheduleproject.user.entity.User;
+import min.scheduleproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -17,24 +19,28 @@ import java.util.stream.Collectors;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleCreateRequestDto dto) {
-        Schedule created = scheduleRepository.save(Schedule.of(dto.getName(), dto.getTitle(), dto.getContents(), dto.getPassword()));
+
+        User user = userRepository.findById(dto.getUid()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저"));
+
+        Schedule created = scheduleRepository.save(Schedule.of(user, dto.getTitle(), dto.getContents(), dto.getPassword()));
         return ScheduleResponseDto.from(created);
     }
 
     @Transactional(readOnly = true)
-    public ScheduleFindResponseDto findSchedule(Long id) {
+    public ScheduleGetResponseDto findSchedule(Long id) {
         Schedule found = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 ID값"));
-        return ScheduleFindResponseDto.from(found);
+        return ScheduleGetResponseDto.from(found);
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleFindResponseDto> findAllSchedules(String name) {
-        List<Schedule> foundSchedules = scheduleRepository.findAllByNameOrderByModifiedAtDesc(name);
-        List<ScheduleFindResponseDto> dtos = foundSchedules.stream()
-                .map(ScheduleFindResponseDto::from)
+    public List<ScheduleGetResponseDto> findAllSchedules(Long uid) {
+        List<Schedule> foundSchedules = scheduleRepository.findAllByUserIdOrderByModifiedAtDesc(uid);
+        List<ScheduleGetResponseDto> dtos = foundSchedules.stream()
+                .map(ScheduleGetResponseDto::from)
                 .collect(Collectors.toList());
         return dtos;
     }
@@ -43,9 +49,10 @@ public class ScheduleService {
     public ScheduleResponseDto modifySchedule(long id, ScheduleModifyRequestDto dto) {
         Schedule found = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 ID값"));
 
+        if(!ObjectUtils.nullSafeEquals(dto.uid(), found.getUser().getId())) throw new IllegalStateException("유저 아이디 불일치");
         if(!ObjectUtils.nullSafeEquals(found.getPassword(), dto.password())) throw new IllegalStateException("비밀번호 불일치");
 
-        found.modifyTitleName(dto.title(), dto.name());
+        found.modifySchedule(dto.title());
         return ScheduleResponseDto.from(found);
     }
 
@@ -53,6 +60,7 @@ public class ScheduleService {
     public void deleteSchedule(long id, ScheduleDeleteRequestDto dto) {
         Schedule found = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 ID값"));
 
+        if(!ObjectUtils.nullSafeEquals(dto.uid(), found.getUser().getId())) throw new IllegalStateException("유저 아이디 불일치");
         if(!ObjectUtils.nullSafeEquals(found.getPassword(), dto.password())) throw new IllegalStateException("비밀번호 불일치");
 
         scheduleRepository.deleteById(id);
