@@ -1,6 +1,7 @@
 package min.scheduleproject.schedule.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import min.scheduleproject.schedule.dto.*;
 import min.scheduleproject.schedule.entity.Schedule;
 import min.scheduleproject.schedule.repository.ScheduleRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -25,8 +27,15 @@ public class ScheduleService {
     public ScheduleResponseDto createSchedule(ScheduleCreateRequestDto dto) {
 
         User user = userRepository.findById(dto.getUid()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저"));
+        //Schedule schedule1 = ScheduleMapper.INSTANCE.of(user, dto);
 
-        Schedule created = scheduleRepository.save(Schedule.of(user, dto.getTitle(), dto.getContents(), dto.getPassword()));
+        Schedule schedule2 = Schedule.of(user, dto);
+
+        //log.info("ScheduleMapper: " + schedule1.toString());
+
+        //Schedule created = scheduleRepository.save(schedule1);
+        Schedule created = scheduleRepository.save(schedule2);
+
         return ScheduleResponseDto.from(created);
     }
 

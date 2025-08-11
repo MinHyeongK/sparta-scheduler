@@ -1,6 +1,8 @@
 package min.scheduleproject.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import min.scheduleproject.user.dto.UserLoginRequestDto;
 import min.scheduleproject.user.dto.UserModifyRequestDto;
 import min.scheduleproject.user.dto.UserRequestDto;
 import min.scheduleproject.user.dto.UserResponseDto;
@@ -17,9 +19,20 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(dto));
+    }
+
+    @PostMapping("/login")
+    public void login(HttpServletRequest request,
+                      @RequestBody UserLoginRequestDto dto){
+        userService.login(request, dto);
+    }
+
+    @PostMapping("logout")
+    public void logout(HttpServletRequest request){
+        userService.logout(request);
     }
 
     @GetMapping("/{id}")
@@ -38,10 +51,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.modifiedUser(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     public void deleteUser(@PathVariable long id,
-                           @RequestParam String password){
-        userService.deleteUser(id, password);
+                           @RequestParam UserRequestDto dto){
+        userService.deleteUser(id, dto);
     }
 
 }

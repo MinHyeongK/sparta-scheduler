@@ -1,5 +1,7 @@
 package min.scheduleproject.schedule.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import min.scheduleproject.schedule.entity.Schedule;
 import java.time.LocalDateTime;
 

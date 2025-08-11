@@ -3,7 +3,8 @@ package min.scheduleproject.schedule.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import min.scheduleproject.common.dto.BaseTimeEntity;
+import min.scheduleproject.common.entity.BaseTimeEntity;
+import min.scheduleproject.schedule.dto.ScheduleCreateRequestDto;
 import min.scheduleproject.user.entity.User;
 
 @Entity
@@ -13,11 +14,13 @@ public class Schedule extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
-    private String contents;
+
     private String title;
+    private String contents;
     private String password;
 
     private Schedule(User user, String title, String contents, String password) {
@@ -27,8 +30,8 @@ public class Schedule extends BaseTimeEntity {
         this.password = password;
     }
 
-    public static Schedule of(User user, String title, String contents, String password){
-        return new Schedule(user, title, contents, password);
+    public static Schedule of(User user, ScheduleCreateRequestDto dto){
+        return new Schedule(user, dto.getTitle(), dto.getContents(), user.getPassword());
     }
 
     public void modifySchedule(String title){

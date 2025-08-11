@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findAllByIdOrderByModifiedAtDesc(Long uid);
-
     List<Schedule> findAllByUserIdOrderByModifiedAtDesc(Long userId);
 };

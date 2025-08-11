@@ -1,12 +1,10 @@
 package min.scheduleproject.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import min.scheduleproject.common.dto.BaseTimeEntity;
+import min.scheduleproject.common.entity.BaseTimeEntity;
+import min.scheduleproject.user.dto.UserRequestDto;
 
 @Entity
 @Getter
@@ -16,6 +14,7 @@ public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
+    @Column(unique = true)
     private String email;
     private String password;
 
@@ -25,8 +24,8 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-    public static User of(String userName, String email, String password) {
-        return new User(userName, email, password);
+    public static User of(UserRequestDto dto) {
+        return new User(dto.getUserName(), dto.getEmail(), dto.getPassword());
     }
 
     public void modifyUser(String userName){this.userName = userName;};

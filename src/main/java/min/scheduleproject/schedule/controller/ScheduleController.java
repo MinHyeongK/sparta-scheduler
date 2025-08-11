@@ -1,5 +1,6 @@
 package min.scheduleproject.schedule.controller;
 
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import min.scheduleproject.schedule.dto.*;
 import min.scheduleproject.schedule.service.ScheduleService;
