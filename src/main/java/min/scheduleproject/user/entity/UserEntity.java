@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import min.scheduleproject.common.entity.BaseTimeEntity;
-import min.scheduleproject.user.dto.UserRequestDto;
 
 @Entity
 @Getter

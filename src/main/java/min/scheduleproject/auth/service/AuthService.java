@@ -3,9 +3,9 @@ package min.scheduleproject.auth.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.auth.dto.AuthLoginRequestDto;
-import min.scheduleproject.auth.dto.AuthRequestDto;
-import min.scheduleproject.auth.dto.AuthResponseDto;
+import min.scheduleproject.auth.dto.request.AuthLoginRequestDto;
+import min.scheduleproject.auth.dto.request.AuthSignupRequestDto;
+import min.scheduleproject.auth.dto.response.AuthSignupResponseDto;
 import min.scheduleproject.auth.repository.AuthRepository;
 import min.scheduleproject.user.entity.UserEntity;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,13 +18,13 @@ public class AuthService {
 
     private final AuthRepository authRepository;
 
-    public AuthResponseDto signup(AuthRequestDto dto){
+    public AuthSignupResponseDto signup(AuthSignupRequestDto dto){
         UserEntity userEntity = authRepository.findByEmail(dto.email());
         if (userEntity != null) throw new DuplicateKeyException("이미 존재하는 이메일");
 
         UserEntity created = authRepository.save(new UserEntity(dto.userName(), dto.email(), dto.password()));
 
-        return AuthResponseDto.from(created);
+        return AuthSignupResponseDto.from(created);
     }
 
     public void login(HttpServletRequest request, AuthLoginRequestDto dto) {

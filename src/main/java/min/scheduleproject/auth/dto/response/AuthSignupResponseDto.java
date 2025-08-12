@@ -1,18 +1,18 @@
-package min.scheduleproject.auth.dto;
+package min.scheduleproject.auth.dto.response;
 
 import min.scheduleproject.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 
-public record AuthResponseDto(
+public record AuthSignupResponseDto(
         Long id,
         String userName,
         String email,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt){
 
-    public static AuthResponseDto from(UserEntity userEntity) {
-    return new AuthResponseDto(
+    public static AuthSignupResponseDto from(UserEntity userEntity) {
+    return new AuthSignupResponseDto(
             userEntity.getUid(),
             userEntity.getUserName(),
             userEntity.getEmail(),

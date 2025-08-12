@@ -3,7 +3,6 @@ package min.scheduleproject.schedule.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import min.scheduleproject.schedule.dto.request.ScheduleCreateRequestDto;
-import min.scheduleproject.schedule.dto.request.ScheduleDeleteRequestDto;
 import min.scheduleproject.schedule.dto.request.ScheduleModifyRequestDto;
 import min.scheduleproject.schedule.dto.response.ScheduleGetResponseDto;
 import min.scheduleproject.schedule.dto.response.ScheduleResponseDto;

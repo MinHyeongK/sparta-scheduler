@@ -2,11 +2,12 @@ package min.scheduleproject.user.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.user.dto.UserModifyRequestDto;
-import min.scheduleproject.user.dto.UserResponseDto;
+import min.scheduleproject.user.dto.request.UserModifyRequestDto;
+import min.scheduleproject.user.dto.response.UserResponseDto;
 import min.scheduleproject.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class UserController {
     //본인 계정 수정
     @PatchMapping("/modify")
     public ResponseEntity<UserResponseDto> modifyUser(HttpSession session,
-                                                      @RequestBody UserModifyRequestDto dto){
+                                                      @Validated @RequestBody UserModifyRequestDto dto){
         return ResponseEntity.status(HttpStatus.OK).body(userService.modifyUser(session, dto));
     }
 
