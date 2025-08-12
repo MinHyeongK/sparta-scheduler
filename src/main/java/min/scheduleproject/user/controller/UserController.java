@@ -1,10 +1,8 @@
 package min.scheduleproject.user.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.user.dto.UserLoginRequestDto;
 import min.scheduleproject.user.dto.UserModifyRequestDto;
-import min.scheduleproject.user.dto.UserRequestDto;
 import min.scheduleproject.user.dto.UserResponseDto;
 import min.scheduleproject.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -19,42 +17,33 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(dto));
+    //본인 계정 조회
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getUserFromSession(HttpSession session){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserFromSession(session));
     }
 
-    @PostMapping("/login")
-    public void login(HttpServletRequest request,
-                      @RequestBody UserLoginRequestDto dto){
-        userService.login(request, dto);
+    //본인 계정 수정
+    @PatchMapping("/modify")
+    public ResponseEntity<UserResponseDto> modifyUser(HttpSession session,
+                                                      @RequestBody UserModifyRequestDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.modifyUser(session, dto));
     }
 
-    @PostMapping("logout")
-    public void logout(HttpServletRequest request){
-        userService.logout(request);
+    //본인 게정 삭제
+    @DeleteMapping("/delete")
+    public void deleteUser(HttpSession session){
+        userService.deleteUser(session);
     }
+    // TODO: 관리자용 메서드. DB에 관리자계정 세팅 후 사용한다는 가정
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable long id){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(id));
+    @GetMapping("/manage/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> modifiedUser(@PathVariable long id, @RequestBody UserModifyRequestDto dto){
-
-        return ResponseEntity.status(HttpStatus.OK).body(userService.modifiedUser(id, dto));
-    }
-
-    @DeleteMapping("/delete")
-    public void deleteUser(@PathVariable long id,
-                           @RequestParam UserRequestDto dto){
-        userService.deleteUser(id, dto);
-    }
-
 }

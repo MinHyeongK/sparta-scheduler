@@ -1,14 +1,15 @@
 package min.scheduleproject.common.exception;
 
-public class CustomException extends RuntimeException {
+public class CustomException extends RuntimeException{
     private final ErrorCode errorCode;
 
     public CustomException(ErrorCode errorCode){
-        super(errorCode.getMessage());
+        super((errorCode.getMessage()));
         this.errorCode = errorCode;
     }
 
-    public String getCode(){
+    public  String getCode(){
         return errorCode.getCode();
     }
+
 }
