@@ -3,6 +3,8 @@ package min.scheduleproject.schedule.service;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import min.scheduleproject.common.exception.CustomException;
+import min.scheduleproject.common.exception.ErrorCode;
 import min.scheduleproject.schedule.dto.request.ScheduleCreateRequestDto;
 import min.scheduleproject.schedule.dto.request.ScheduleModifyRequestDto;
 import min.scheduleproject.schedule.dto.response.ScheduleGetResponseDto;
@@ -34,7 +36,7 @@ public class ScheduleService {
                                               ScheduleCreateRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
-        UserEntity user = userRepository.findById(uid).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저"));
+        UserEntity user = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = Schedule.of(user, dto);
         Schedule created = scheduleRepository.save(schedule);
@@ -44,7 +46,7 @@ public class ScheduleService {
 
     //TODO: shceudleId로 일정을 반환하는 메서드 제작
     public ScheduleGetResponseDto findScheduleByScheduleId(long scheduleId) {
-        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 scheduleId"));
+        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         return ScheduleGetResponseDto.from(found);
     }
@@ -75,9 +77,9 @@ public class ScheduleService {
     public ScheduleResponseDto modifySchedule(HttpSession session, Long scheduleId, ScheduleModifyRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
-        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 ID값"));
+        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if(!ObjectUtils.nullSafeEquals(uid, found.getUser().getUid())) throw new IllegalStateException("유저 아이디 불일치");
+        if(!ObjectUtils.nullSafeEquals(uid, found.getUser().getUid())) throw new CustomException(ErrorCode.USER_ID_MISMATCH);
 
         found.modifySchedule(dto.title(), dto.contents());
 
@@ -88,9 +90,9 @@ public class ScheduleService {
     public void deleteSchedule(HttpSession session, Long scheduleId) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
-        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 ID값"));
+        Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if(!ObjectUtils.nullSafeEquals(uid, found.getUser().getUid())) throw new IllegalStateException("유저 아이디 불일치");
+        if(!ObjectUtils.nullSafeEquals(uid, found.getUser().getUid())) throw new CustomException(ErrorCode.USER_ID_MISMATCH);
 
         scheduleRepository.deleteById(scheduleId);
     }
