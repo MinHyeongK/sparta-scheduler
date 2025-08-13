@@ -2,8 +2,8 @@ package min.scheduleproject.comment.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.comment.dto.CommentRequestDto;
-import min.scheduleproject.comment.dto.CommentResponseDto;
+import min.scheduleproject.comment.dto.request.CommentRequestDto;
+import min.scheduleproject.comment.dto.response.CommentResponseDto;
 import min.scheduleproject.comment.entity.Comment;
 import min.scheduleproject.comment.repository.CommentRepository;
 import min.scheduleproject.common.exception.CustomException;

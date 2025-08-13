@@ -13,11 +13,14 @@ import min.scheduleproject.user.entity.User;
 public class Schedule extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id", nullable = false)
     private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    @Column(name = "title", nullable = false, length = 10)
     private String title;
+    @Column(name = "contents", nullable = false, length = 200)
     private String contents;
 
     private Schedule(User user, String title, String contents) {

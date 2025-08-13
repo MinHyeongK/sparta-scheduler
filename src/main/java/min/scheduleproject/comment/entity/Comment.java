@@ -3,7 +3,7 @@ package min.scheduleproject.comment.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import min.scheduleproject.comment.dto.CommentRequestDto;
+import min.scheduleproject.comment.dto.request.CommentRequestDto;
 import min.scheduleproject.common.entity.BaseTimeEntity;
 import min.scheduleproject.schedule.entity.Schedule;
 import min.scheduleproject.user.entity.User;
@@ -13,8 +13,8 @@ import min.scheduleproject.user.entity.User;
 @Getter
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id", nullable = false)
     private Long commentId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
@@ -22,6 +22,7 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+    @Column(name = "contents", nullable = false, length = 200)
     private String contents;
 
     public Comment (User user, Schedule schedule, String contents){

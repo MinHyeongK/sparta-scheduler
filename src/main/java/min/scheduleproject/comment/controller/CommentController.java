@@ -2,8 +2,8 @@ package min.scheduleproject.comment.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import min.scheduleproject.comment.dto.CommentRequestDto;
-import min.scheduleproject.comment.dto.CommentResponseDto;
+import min.scheduleproject.comment.dto.request.CommentRequestDto;
+import min.scheduleproject.comment.dto.response.CommentResponseDto;
 import min.scheduleproject.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

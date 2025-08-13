@@ -25,33 +25,33 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(HttpSession session,
                                                               @Validated @RequestBody ScheduleCreateRequestDto dto){
-        return new ResponseEntity<>(scheduleService.createSchedule(session, dto), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(session, dto));
     }
 
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleGetResponseDto> findScheduleByScheduleId(@PathVariable long scheduleId){
-        return new ResponseEntity<>(scheduleService.findScheduleByScheduleId(scheduleId), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findScheduleByScheduleId(scheduleId));
     }
 
     @GetMapping(params = "uid")
     public ResponseEntity<Page<ScheduleGetResponseDto>> findAllSchedulesByUid(@RequestParam(required = false) long uid,
                                                                               @RequestParam(defaultValue = "0") int pageNum,
                                                                               @RequestParam(defaultValue = "10") int pageSize){
-        return new ResponseEntity<>(scheduleService.findAllSchedulesByUid(uid, pageNum, pageSize), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAllSchedulesByUid(uid, pageNum, pageSize));
     }
 
     @GetMapping(params = "title")
     public ResponseEntity<Page<ScheduleGetResponseDto>> findAllScheduleByTitle(@RequestParam String title,
                                                                                @RequestParam(defaultValue = "0") int pageNum,
                                                                                @RequestParam(defaultValue = "10") int pageSize){
-        return new ResponseEntity<>(scheduleService.findAllScheduleByTitle(title, pageNum, pageSize), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAllScheduleByTitle(title, pageNum, pageSize));
     }
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> modifySchedule(HttpSession session,
                                                               @PathVariable long scheduleId,
                                                               @Validated @RequestBody ScheduleModifyRequestDto dto){
-        return new ResponseEntity<>(scheduleService.modifySchedule(session, scheduleId, dto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.modifySchedule(session, scheduleId, dto));
     }
 
     @DeleteMapping("/{scheduleId}")

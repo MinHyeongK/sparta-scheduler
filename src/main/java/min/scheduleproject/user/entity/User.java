@@ -11,10 +11,13 @@ import min.scheduleproject.common.entity.BaseTimeEntity;
 public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uid", nullable = false)
     private Long uid;
+    @Column(unique = true, name = "user_name", nullable = false, length = 10)
     private String userName;
-    @Column(unique = true)
+    @Column(unique = true, name = "email", nullable = false)
     private String email;
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
 
     public User(String userName, String email, String password) {

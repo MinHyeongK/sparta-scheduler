@@ -24,7 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto getUserFromSession(HttpSession session) {
+    public UserResponseDto getCurrentUser(HttpSession session) {
         //session 내부 보는 코드
         Enumeration<String> attrNames = session.getAttributeNames();
         while (attrNames.hasMoreElements()) {
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto modifyUser(HttpSession session, UserModifyRequestDto dto) {
+    public UserResponseDto modifyCurrentUser(HttpSession session, UserModifyRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
         User found = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(HttpSession session) {
+    public void deleteCurrentUser(HttpSession session) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
         User found = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -59,10 +59,8 @@ public class UserService {
         userRepository.deleteById(uid);
     }
 
-    //TODO: UserController 확인
-
-    public UserResponseDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public UserResponseDto getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserResponseDto.from(user);
     }

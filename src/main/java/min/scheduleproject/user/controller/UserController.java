@@ -18,29 +18,25 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    //본인 계정 조회
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDto> getUserFromSession(HttpSession session){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserFromSession(session));
+    public ResponseEntity<UserResponseDto> getCurrentUser(HttpSession session){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getCurrentUser(session));
     }
 
-    //본인 계정 수정
     @PatchMapping("/modify")
-    public ResponseEntity<UserResponseDto> modifyUser(HttpSession session,
-                                                      @Validated @RequestBody UserModifyRequestDto dto){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.modifyUser(session, dto));
+    public ResponseEntity<UserResponseDto> modifyCurrentUser(HttpSession session,
+                                                             @Validated @RequestBody UserModifyRequestDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.modifyCurrentUser(session, dto));
     }
 
-    //본인 게정 삭제
     @DeleteMapping("/delete")
-    public void deleteUser(HttpSession session){
-        userService.deleteUser(session);
+    public void deleteCurrentUser(HttpSession session){
+        userService.deleteCurrentUser(session);
     }
-    // TODO: 관리자용 메서드. DB에 관리자계정 세팅 후 사용한다는 가정
 
-    @GetMapping("/manage/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(userId));
     }
 
     @GetMapping

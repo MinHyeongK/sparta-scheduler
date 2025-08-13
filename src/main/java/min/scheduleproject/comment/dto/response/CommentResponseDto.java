@@ -1,4 +1,4 @@
-package min.scheduleproject.comment.dto;
+package min.scheduleproject.comment.dto.response;
 
 import min.scheduleproject.comment.entity.Comment;
 
