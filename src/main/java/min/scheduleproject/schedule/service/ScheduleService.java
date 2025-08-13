@@ -11,15 +11,17 @@ import min.scheduleproject.schedule.dto.response.ScheduleGetResponseDto;
 import min.scheduleproject.schedule.dto.response.ScheduleResponseDto;
 import min.scheduleproject.schedule.entity.Schedule;
 import min.scheduleproject.schedule.repository.ScheduleRepository;
-import min.scheduleproject.user.entity.UserEntity;
+import min.scheduleproject.user.entity.User;
 import min.scheduleproject.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -36,39 +38,34 @@ public class ScheduleService {
                                               ScheduleCreateRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
-        UserEntity user = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Schedule schedule = Schedule.of(user, dto);
+        Schedule schedule = Schedule.from(user, dto);
         Schedule created = scheduleRepository.save(schedule);
 
         return ScheduleResponseDto.from(created);
     }
 
-    //TODO: shceudleId로 일정을 반환하는 메서드 제작
     public ScheduleGetResponseDto findScheduleByScheduleId(long scheduleId) {
         Schedule found = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         return ScheduleGetResponseDto.from(found);
     }
 
-    // TODO: 동일 title의 일정을 list형태로 반환
-    public List<ScheduleGetResponseDto> findScheduleByTitle(String title) {
-        List<Schedule> foundSchedules = scheduleRepository.findAllByTitleOrderByModifiedAtDesc(title);
-        List<ScheduleGetResponseDto> dtos = foundSchedules.stream()
-                .map(ScheduleGetResponseDto::from)
-                .collect(Collectors.toList());
+    public Page<ScheduleGetResponseDto> findAllSchedulesByUid(Long uid, int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+        Page<Schedule> foundSchedules = scheduleRepository.findAllByUserUidOrderByModifiedAtDesc(pageable, uid);
+        Page<ScheduleGetResponseDto> dtos = foundSchedules.map(ScheduleGetResponseDto::from);
 
         return dtos;
     }
 
-    public List<ScheduleGetResponseDto> findAllSchedulesByUid(Long uid) {
-        //QUESTION: 위 코드와 튜터님이 새로 추천해주신 방법 중 뭐가 더 좋을까
-        Sort sort = Sort.by("createdAt").descending();
+    public Page<ScheduleGetResponseDto> findAllScheduleByTitle(String title, int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
 
-        List<Schedule> foundSchedules = scheduleRepository.findAllByUserUid(uid, sort);
-        List<ScheduleGetResponseDto> dtos = foundSchedules.stream()
-                .map(ScheduleGetResponseDto::from)
-                .collect(Collectors.toList());
+        Page<Schedule> foundSchedules = scheduleRepository.findAllByTitleOrderByModifiedAtDesc(pageable, title);
+        Page<ScheduleGetResponseDto> dtos = foundSchedules.map(ScheduleGetResponseDto::from);
 
         return dtos;
     }

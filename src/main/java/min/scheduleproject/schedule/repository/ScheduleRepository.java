@@ -1,17 +1,11 @@
 package min.scheduleproject.schedule.repository;
 
 import min.scheduleproject.schedule.entity.Schedule;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
-@Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    Optional<Schedule> findByTitle(String title);
-    List<Schedule> findAllByUserUid(Long uid, Sort sort);
-
-    List<Schedule> findAllByTitleOrderByModifiedAtDesc(String title);
+    Page<Schedule> findAllByTitleOrderByModifiedAtDesc(Pageable pageable, String title);
+    Page<Schedule> findAllByUserUidOrderByModifiedAtDesc(Pageable pageable, Long userUid);
 };

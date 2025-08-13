@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import min.scheduleproject.common.entity.BaseTimeEntity;
 import min.scheduleproject.schedule.dto.request.ScheduleCreateRequestDto;
-import min.scheduleproject.user.entity.UserEntity;
+import min.scheduleproject.user.entity.User;
 
 @Entity
 @Getter
@@ -16,17 +16,17 @@ public class Schedule extends BaseTimeEntity {
     private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
     private String title;
     private String contents;
 
-    private Schedule(UserEntity user, String title, String contents) {
+    private Schedule(User user, String title, String contents) {
         this.user = user;
         this.title = title;
         this.contents = contents;
     }
 
-    public static Schedule of(UserEntity user, ScheduleCreateRequestDto dto){
+    public static Schedule from(User user, ScheduleCreateRequestDto dto){
         return new Schedule(user, dto.title(), dto.contents());
     }
 

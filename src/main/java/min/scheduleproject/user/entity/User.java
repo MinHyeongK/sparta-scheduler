@@ -8,7 +8,7 @@ import min.scheduleproject.common.entity.BaseTimeEntity;
 @Entity
 @Getter
 @NoArgsConstructor
-public class UserEntity extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
@@ -17,7 +17,7 @@ public class UserEntity extends BaseTimeEntity {
     private String email;
     private String password;
 
-    public UserEntity(String userName, String email, String password) {
+    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;

@@ -7,6 +7,7 @@ import min.scheduleproject.schedule.dto.request.ScheduleModifyRequestDto;
 import min.scheduleproject.schedule.dto.response.ScheduleGetResponseDto;
 import min.scheduleproject.schedule.dto.response.ScheduleResponseDto;
 import min.scheduleproject.schedule.service.ScheduleService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,14 +33,18 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findScheduleByScheduleId(scheduleId), HttpStatus.OK);
     }
 
-    @GetMapping(params = "title")
-    public ResponseEntity<List<ScheduleGetResponseDto>> findScheduleByTitle(@RequestParam String title){
-        return new ResponseEntity<>(scheduleService.findScheduleByTitle(title), HttpStatus.OK);
+    @GetMapping(params = "uid")
+    public ResponseEntity<Page<ScheduleGetResponseDto>> findAllSchedulesByUid(@RequestParam(required = false) long uid,
+                                                                              @RequestParam(defaultValue = "0") int pageNum,
+                                                                              @RequestParam(defaultValue = "10") int pageSize){
+        return new ResponseEntity<>(scheduleService.findAllSchedulesByUid(uid, pageNum, pageSize), HttpStatus.OK);
     }
 
-    @GetMapping(params = "uid")
-    public ResponseEntity<List<ScheduleGetResponseDto>> findAllSchedulesByUid(@RequestParam(required = false) long uid){
-        return new ResponseEntity<>(scheduleService.findAllSchedulesByUid(uid), HttpStatus.OK);
+    @GetMapping(params = "title")
+    public ResponseEntity<Page<ScheduleGetResponseDto>> findAllScheduleByTitle(@RequestParam String title,
+                                                                               @RequestParam(defaultValue = "0") int pageNum,
+                                                                               @RequestParam(defaultValue = "10") int pageSize){
+        return new ResponseEntity<>(scheduleService.findAllScheduleByTitle(title, pageNum, pageSize), HttpStatus.OK);
     }
 
     @PatchMapping("/{scheduleId}")
