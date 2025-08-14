@@ -2,6 +2,8 @@ package min.scheduleproject.user.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import min.scheduleproject.user.dto.request.UserDeleteRequestDto;
 import min.scheduleproject.user.dto.request.UserModifyRequestDto;
 import min.scheduleproject.user.dto.response.UserResponseDto;
 import min.scheduleproject.user.service.UserService;
@@ -11,7 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -23,17 +27,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getCurrentUser(session));
     }
 
-    @PatchMapping("/modify")
-    public ResponseEntity<UserResponseDto> modifyCurrentUser(HttpSession session,
-                                                             @Validated @RequestBody UserModifyRequestDto dto){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.modifyCurrentUser(session, dto));
-    }
-
-    @DeleteMapping("/delete")
-    public void deleteCurrentUser(HttpSession session){
-        userService.deleteCurrentUser(session);
-    }
-
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable long userId){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(userId));
@@ -42,5 +35,16 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+    }
+
+    @PatchMapping("/modify")
+    public ResponseEntity<UserResponseDto> modifyCurrentUser(HttpSession session,
+                                                             @Validated @RequestBody UserModifyRequestDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.modifyCurrentUser(session, dto));
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteCurrentUser(HttpSession session, @Validated @RequestBody UserDeleteRequestDto dto){
+        userService.deleteCurrentUser(session, dto);
     }
 }

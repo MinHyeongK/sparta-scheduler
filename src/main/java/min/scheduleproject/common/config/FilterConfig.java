@@ -13,6 +13,7 @@ public class FilterConfig {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new LoginFilter()); // Filter 등록
         filterRegistrationBean.addUrlPatterns("/*"); // 전체 URL에 Filter 적용
+        //filterRegistrationBean.setOrder(1);                     // 실행 순서
 
         return filterRegistrationBean;
     }

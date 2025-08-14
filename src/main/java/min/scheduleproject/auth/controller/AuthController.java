@@ -1,6 +1,7 @@
 package min.scheduleproject.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import min.scheduleproject.auth.dto.request.AuthLoginRequestDto;
 import min.scheduleproject.auth.dto.request.AuthSignupRequestDto;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("logout")
-    public void logout(HttpServletRequest request){
-        authService.logout(request);
+    public void logout(HttpSession session){
+        authService.logout(session);
     }
 }

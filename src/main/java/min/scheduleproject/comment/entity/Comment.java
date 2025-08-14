@@ -17,7 +17,7 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id", nullable = false)
     private Long commentId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "schedule_id")

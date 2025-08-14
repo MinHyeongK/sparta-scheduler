@@ -10,4 +10,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> findBySchedule_ScheduleIdOrderByCreatedAtDesc(Long scheduleScheduleId);
 
     Comment findByCommentId(Long commentId);
+
+    List<Comment> findAllBySchedule_ScheduleIdOrderByCreatedAtAsc(Long scheduleId);
+
+    boolean existsBySchedule_ScheduleId(Long scheduleId);
 }

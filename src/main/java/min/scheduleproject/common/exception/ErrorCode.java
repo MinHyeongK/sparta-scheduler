@@ -18,7 +18,8 @@ public enum ErrorCode {
     LOGIN_USER_NOT_FOUND("AUTH-002", "해당 이메일의 사용자가 존재하지 않습니다."),
     INVALID_PASSWORD_FORMAT("AUTH-003", "비밀번호는 8자 이상, 20자 이하이어야 합니다."),
 
-    SCHEDULE_NOT_FOUND("SCH-001", "존재하지 않는 일정 ID입니다.");
+    SCHEDULE_NOT_FOUND("SCH-001", "존재하지 않는 일정 ID입니다."),
+    SCHEDULE_HAS_COMMENTS("SCH-002", "댓글이 있는 일정은 삭제할 수 없습니다.");
 
     private final String code;
     private final String message;

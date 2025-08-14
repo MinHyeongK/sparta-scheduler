@@ -3,6 +3,7 @@ package min.scheduleproject.auth.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import min.scheduleproject.auth.dto.request.AuthLoginRequestDto;
 import min.scheduleproject.auth.dto.request.AuthSignupRequestDto;
 import min.scheduleproject.auth.dto.response.AuthSignupResponseDto;
@@ -12,9 +13,12 @@ import min.scheduleproject.common.exception.CustomException;
 import min.scheduleproject.common.exception.ErrorCode;
 import min.scheduleproject.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class AuthService {
 
     private final AuthRepository authRepository;
@@ -42,8 +46,7 @@ public class AuthService {
         session.setAttribute("LOGIN_USER", userEntity.getUid());
     }
 
-    public void logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+    public void logout(HttpSession session) {
         if (session != null) session.invalidate();
     }
 }

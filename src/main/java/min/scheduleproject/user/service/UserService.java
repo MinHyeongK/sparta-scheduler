@@ -3,8 +3,10 @@ package min.scheduleproject.user.service;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import min.scheduleproject.common.config.PasswordEncoder;
 import min.scheduleproject.common.exception.CustomException;
 import min.scheduleproject.common.exception.ErrorCode;
+import min.scheduleproject.user.dto.request.UserDeleteRequestDto;
 import min.scheduleproject.user.dto.request.UserModifyRequestDto;
 import min.scheduleproject.user.dto.response.UserResponseDto;
 import min.scheduleproject.user.entity.User;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto getCurrentUser(HttpSession session) {
         //session 내부 보는 코드
@@ -39,6 +42,18 @@ public class UserService {
         return UserResponseDto.from(user);
     }
 
+    public UserResponseDto getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return UserResponseDto.from(user);
+    }
+
+    public List<UserResponseDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream().map(UserResponseDto::from).collect(Collectors.toList());
+    }
+
     @Transactional
     public UserResponseDto modifyCurrentUser(HttpSession session, UserModifyRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
@@ -51,23 +66,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteCurrentUser(HttpSession session) {
+    public void deleteCurrentUser(HttpSession session, UserDeleteRequestDto dto) {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
         User found = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (!passwordEncoder.matches(dto.password(), found.getPassword())) throw new CustomException(ErrorCode.LOGIN_PASSWORD_MISMATCH);;
 
         userRepository.deleteById(uid);
-    }
-
-    public UserResponseDto getUserById(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        return UserResponseDto.from(user);
-    }
-
-    public List<UserResponseDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-
-        return users.stream().map(UserResponseDto::from).collect(Collectors.toList());
     }
 }

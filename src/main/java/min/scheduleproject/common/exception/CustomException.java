@@ -11,5 +11,4 @@ public class CustomException extends RuntimeException{
     public  String getCode(){
         return errorCode.getCode();
     }
-
 }

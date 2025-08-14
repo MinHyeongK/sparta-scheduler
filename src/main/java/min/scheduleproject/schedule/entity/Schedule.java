@@ -3,9 +3,13 @@ package min.scheduleproject.schedule.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import min.scheduleproject.comment.entity.Comment;
 import min.scheduleproject.common.entity.BaseTimeEntity;
 import min.scheduleproject.schedule.dto.request.ScheduleCreateRequestDto;
 import min.scheduleproject.user.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +26,8 @@ public class Schedule extends BaseTimeEntity {
     private String title;
     @Column(name = "contents", nullable = false, length = 200)
     private String contents;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     private Schedule(User user, String title, String contents) {
         this.user = user;
