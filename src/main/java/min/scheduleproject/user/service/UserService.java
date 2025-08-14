@@ -70,7 +70,7 @@ public class UserService {
         Long uid = (Long) session.getAttribute("LOGIN_USER");
 
         User found = userRepository.findById(uid).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if (!passwordEncoder.matches(dto.password(), found.getPassword())) throw new CustomException(ErrorCode.LOGIN_PASSWORD_MISMATCH);;
+        if (!passwordEncoder.matches(dto.password(), found.getPassword())) throw new CustomException(ErrorCode.LOGIN_PASSWORD_MISMATCH);
 
         userRepository.deleteById(uid);
     }

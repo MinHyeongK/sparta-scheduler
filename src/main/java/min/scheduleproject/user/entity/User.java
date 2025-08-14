@@ -22,12 +22,12 @@ public class User extends BaseTimeEntity {
     private String userName;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Schedule> schedules = new ArrayList<>();
+    private final List<Schedule> schedules = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     public User(String userName, String email, String password) {
         this.userName = userName;
@@ -38,5 +38,5 @@ public class User extends BaseTimeEntity {
     public void modifyUser(String userName, String password){
         this.userName = userName;
         this.password = password;
-    };
+    }
 }

@@ -27,7 +27,7 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "contents", nullable = false, length = 200)
     private String contents;
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     private Schedule(User user, String title, String contents) {
         this.user = user;

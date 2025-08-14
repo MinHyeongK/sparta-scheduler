@@ -4,16 +4,14 @@ import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 public class FilterConfig {
     @Bean
     public FilterRegistrationBean<Filter> loginFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new LoginFilter()); // Filter 등록
-        filterRegistrationBean.addUrlPatterns("/*"); // 전체 URL에 Filter 적용
-        //filterRegistrationBean.setOrder(1);                     // 실행 순서
+        filterRegistrationBean.setFilter(new LoginFilter());
+        filterRegistrationBean.addUrlPatterns("/*");
 
         return filterRegistrationBean;
     }
